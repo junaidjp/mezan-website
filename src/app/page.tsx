@@ -180,12 +180,21 @@ export default function Home() {
           </div>
         </div>
 
-        <footer className="mt-10 text-center text-xs text-white/50">
+        <footer className="mt-10 space-y-4 text-center text-xs text-white/50">
           <p>
             Disclaimer: Mezan Investing is for educational purposes only and
             does not provide financial advice. Investing involves risk. Past
             performance is not indicative of future results.
           </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="/privacy-policy" className="hover:text-white">
+              Privacy Policy
+            </a>
+            <span>•</span>
+            <a href="/terms-conditions" className="hover:text-white">
+              Terms & Conditions
+            </a>
+          </div>
         </footer>
       </section>
     </main>
