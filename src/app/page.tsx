@@ -12,6 +12,9 @@ export default function Home() {
             Mezan <span className="text-emerald-400">Investing</span>
           </div>
           <nav className="hidden gap-6 text-sm text-white/70 md:flex">
+            <a href="/analysis" className="hover:text-white">
+              Strategy Analysis
+            </a>
             <a href="#features" className="hover:text-white">
               Features
             </a>
@@ -193,6 +196,10 @@ export default function Home() {
             <span>•</span>
             <a href="/terms-conditions" className="hover:text-white">
               Terms & Conditions
+            </a>
+            <span>•</span>
+            <a href="/delete-account" className="hover:text-white">
+              Delete Account
             </a>
           </div>
         </footer>
