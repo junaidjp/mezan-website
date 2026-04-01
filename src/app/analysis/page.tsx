@@ -212,26 +212,35 @@ export default function AnalysisPage() {
             <h2 className="text-2xl font-semibold">Coming Soon</h2>
           </div>
           <p className="text-white/70 max-w-2xl mx-auto text-lg leading-relaxed">
-            We're working on bringing you powerful strategy analysis tools that will help you:
+            We're working on bringing you powerful strategy analysis tools that
+            will help you:
           </p>
-          
+
           <div className="grid gap-6 md:grid-cols-3 mt-12 max-w-4xl mx-auto">
             <div className="bg-white/5 border border-white/10 rounded-xl p-6">
               <div className="text-3xl mb-4">📈</div>
               <h3 className="font-semibold mb-2">Real-time Analysis</h3>
-              <p className="text-white/60 text-sm">Get current strategy classification for any stock with live market data</p>
+              <p className="text-white/60 text-sm">
+                Get current strategy classification for any stock with live
+                market data
+              </p>
             </div>
-            
+
             <div className="bg-white/5 border border-white/10 rounded-xl p-6">
               <div className="text-3xl mb-4">🎯</div>
               <h3 className="font-semibold mb-2">Strategy Status</h3>
-              <p className="text-white/60 text-sm">See if stocks are trending, have entry signals, or should be avoided</p>
+              <p className="text-white/60 text-sm">
+                See if stocks are trending, have entry signals, or should be
+                avoided
+              </p>
             </div>
-            
+
             <div className="bg-white/5 border border-white/10 rounded-xl p-6">
               <div className="text-3xl mb-4">📊</div>
               <h3 className="font-semibold mb-2">Historical Validation</h3>
-              <p className="text-white/60 text-sm">View complete backtest performance with detailed trade analysis</p>
+              <p className="text-white/60 text-sm">
+                View complete backtest performance with detailed trade analysis
+              </p>
             </div>
           </div>
 
@@ -240,7 +249,8 @@ export default function AnalysisPage() {
               📱 Download the Mobile App
             </h3>
             <p className="text-white/70 mb-6">
-              Get access to our complete strategy analysis tools in the Mezan Investing mobile app, available now on iOS and Android.
+              Get access to our complete strategy analysis tools in the Mezan
+              Investing mobile app, available now on iOS and Android.
             </p>
             <div className="flex gap-4 justify-center">
               <a

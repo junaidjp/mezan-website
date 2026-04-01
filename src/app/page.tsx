@@ -15,6 +15,9 @@ export default function Home() {
             <a href="/analysis" className="hover:text-white">
               Strategy Analysis
             </a>
+            <a href="/waitlist" className="hover:text-white">
+              Mezan Waitlist
+            </a>
             <a href="#features" className="hover:text-white">
               Features
             </a>
