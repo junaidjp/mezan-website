@@ -1,7 +1,7 @@
 export default function Home() {
-  const appStoreUrl = "https://apple.co/YOUR_APP_LINK";
+  const appStoreUrl = "https://apps.apple.com/us/app/mezan-investing/id6755348850";
   const playStoreUrl =
-    "https://play.google.com/store/apps/details?id=YOUR_PACKAGE";
+    "https://play.google.com/store/apps/details?id=com.mezan.investing";
 
   return (
     <main className="min-h-screen bg-black text-white">
