@@ -37,7 +37,7 @@ export async function GET() {
     // Get all research picks that have a theme
     const picks = await db
       .collection("research_picks")
-      .find({ theme: { $exists: true, $ne: null, $ne: "" } })
+      .find({ theme: { $exists: true, $nin: [null, ""] } })
       .sort({ addedAt: -1 })
       .toArray();
 
