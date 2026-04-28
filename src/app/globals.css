@@ -1,26 +1,118 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+:root,
+[data-theme="dark"] {
+  --bg: #060a10;
+  --bg-secondary: #0c1118;
+  --card: rgba(255, 255, 255, 0.02);
+  --card-hover: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(16, 185, 129, 0.2);
+  --text: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  --text-muted: rgba(255, 255, 255, 0.3);
+  --text-faint: rgba(255, 255, 255, 0.15);
+  --accent: #10b981;
+  --accent-bg: rgba(16, 185, 129, 0.1);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.04);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] {
+  --bg: #f1f5f9;
+  --bg-secondary: #ffffff;
+  --card: rgba(0, 0, 0, 0.02);
+  --card-hover: rgba(0, 0, 0, 0.04);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(5, 150, 105, 0.2);
+  --text: #111827;
+  --text-secondary: rgba(0, 0, 0, 0.55);
+  --text-muted: rgba(0, 0, 0, 0.35);
+  --text-faint: rgba(0, 0, 0, 0.15);
+  --accent: #059669;
+  --accent-bg: rgba(5, 150, 105, 0.08);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.08);
+  --info: #2563eb;
+  --info-bg: rgba(37, 99, 235, 0.08);
+  --input-bg: rgba(0, 0, 0, 0.03);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.2s, color 0.2s;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* Utility classes for theme-aware colors */
+.theme-bg { background: var(--bg); }
+.theme-card { background: var(--card); border-color: var(--border); }
+.theme-text { color: var(--text); }
+.theme-text-secondary { color: var(--text-secondary); }
+.theme-text-muted { color: var(--text-muted); }
+.theme-border { border-color: var(--border); }
+
+/* Light mode overrides for hardcoded Tailwind dark colors */
+[data-theme="light"] .text-white { color: var(--text) !important; }
+[data-theme="light"] .text-white\/\[0-9\] { color: var(--text-secondary) !important; }
+[data-theme="light"] .text-white\/70 { color: var(--text-secondary) !important; }
+[data-theme="light"] .text-white\/80 { color: #1f2937 !important; }
+[data-theme="light"] .text-white\/70 { color: #374151 !important; }
+[data-theme="light"] .text-white\/60 { color: #4b5563 !important; }
+[data-theme="light"] .text-white\/50 { color: #6b7280 !important; }
+[data-theme="light"] .text-white\/40 { color: #6b7280 !important; }
+[data-theme="light"] .text-white\/30 { color: #9ca3af !important; }
+[data-theme="light"] .text-white\/25 { color: #9ca3af !important; }
+[data-theme="light"] .text-white\/20 { color: #9ca3af !important; }
+[data-theme="light"] .bg-white\/\[0\.02\] { background: #ffffff !important; }
+[data-theme="light"] .bg-white\/\[0\.03\] { background: #f9fafb !important; }
+[data-theme="light"] .bg-white\/\[0\.04\] { background: #f3f4f6 !important; }
+[data-theme="light"] .bg-white\/\[0\.06\] { background: #f0f1f3 !important; }
+[data-theme="light"] .bg-white\/5 { background: #f3f4f6 !important; }
+[data-theme="light"] .bg-white\/10 { background: #e5e7eb !important; }
+[data-theme="light"] .border-white\/5 { border-color: #e5e7eb !important; }
+[data-theme="light"] .border-white\/10 { border-color: #d1d5db !important; }
+[data-theme="light"] .border-white\/\[0\.04\] { border-color: #e5e7eb !important; }
+[data-theme="light"] .border-white\/\[0\.06\] { border-color: #d1d5db !important; }
+[data-theme="light"] .placeholder-white\/20::placeholder { color: rgba(0,0,0,0.3) !important; }
+[data-theme="light"] .placeholder-white\/25::placeholder { color: rgba(0,0,0,0.3) !important; }
+[data-theme="light"] .placeholder-white\/30::placeholder { color: rgba(0,0,0,0.3) !important; }
+
+/* Light mode badge visibility fixes */
+[data-theme="light"] .bg-emerald-500\/10 { background: rgba(5, 150, 105, 0.15) !important; }
+[data-theme="light"] .bg-emerald-500\/20 { background: rgba(5, 150, 105, 0.2) !important; }
+[data-theme="light"] .bg-red-500\/10 { background: rgba(220, 38, 38, 0.12) !important; }
+[data-theme="light"] .bg-red-500\/20 { background: rgba(220, 38, 38, 0.18) !important; }
+[data-theme="light"] .bg-amber-500\/10 { background: rgba(217, 119, 6, 0.12) !important; }
+[data-theme="light"] .bg-blue-500\/10 { background: rgba(37, 99, 235, 0.12) !important; }
+[data-theme="light"] .bg-purple-500\/10 { background: rgba(147, 51, 234, 0.12) !important; }
+
+/* Stronger text on badges in light mode */
+[data-theme="light"] .text-emerald-400 { color: #047857 !important; }
+[data-theme="light"] .text-red-400 { color: #b91c1c !important; }
+[data-theme="light"] .text-amber-400 { color: #b45309 !important; }
+[data-theme="light"] .text-blue-400 { color: #1d4ed8 !important; }
+
+/* Card shadows in light mode */
+[data-theme="light"] .shadow-2xl { box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important; }
+
+/* Input borders */
+[data-theme="light"] .border-emerald-500\/20 { border-color: rgba(5, 150, 105, 0.3) !important; }
+[data-theme="light"] .focus\:border-emerald-500\/50:focus { border-color: rgba(5, 150, 105, 0.5) !important; }
