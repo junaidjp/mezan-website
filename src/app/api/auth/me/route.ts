@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
     const db = await getMongo();
     await db.collection("research_sessions").updateOne(
-      { _id: uid },
+      { _id: uid as any },
       {
         $set: {
           uid,
@@ -102,7 +102,7 @@ export async function DELETE(req: NextRequest) {
     if (!uid) return NextResponse.json({ error: "Missing uid" }, { status: 400 });
 
     const db = await getMongo();
-    await db.collection("research_sessions").deleteOne({ _id: uid });
+    await db.collection("research_sessions").deleteOne({ _id: uid as any });
 
     return NextResponse.json({ status: "ok" });
   } catch {

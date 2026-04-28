@@ -78,7 +78,7 @@ export async function GET(
   try {
     const mongoDB = await getMongo();
     [tickerLevels, halalDoc] = await Promise.all([
-      mongoDB.collection("ticker_levels").findOne({ _id: t }),
+      mongoDB.collection("ticker_levels").findOne({ _id: t as any }),
       mongoDB.collection("halal_compliance").findOne({ ticker: t }),
     ]);
 
