@@ -11,24 +11,24 @@ export default function Home() {
           <div className="text-lg font-semibold tracking-tight">
             Mezan <span className="text-emerald-400">Investing</span>
           </div>
-          <nav className="hidden gap-6 text-sm text-white/70 md:flex">
+          <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
             <a href="/analysis" className="hover:text-white">
               Strategy Analysis
             </a>
-            <a href="/waitlist" className="hover:text-white">
-              Mezan Waitlist
-            </a>
             <a href="#features" className="hover:text-white">
               Features
-            </a>
-            <a href="#screens" className="hover:text-white">
-              Screens
             </a>
             <a href="#halal" className="hover:text-white">
               Halal Method
             </a>
             <a href="#download" className="hover:text-white">
               Download
+            </a>
+            <a
+              href="/research"
+              className="rounded-lg bg-emerald-500 px-4 py-2 font-semibold text-black transition hover:bg-emerald-400"
+            >
+              Mezan Research
             </a>
           </nav>
         </div>
