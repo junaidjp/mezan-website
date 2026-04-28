@@ -31,7 +31,7 @@ export default function ElitePage() {
         <div className="relative mx-auto max-w-5xl px-6 pb-20 pt-24 text-center">
           <div className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-1.5 text-sm text-emerald-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Elite Membership
+            Mezan Research
           </div>
 
           <h1 className="text-5xl font-bold leading-[1.1] tracking-tight md:text-7xl">
@@ -53,7 +53,7 @@ export default function ElitePage() {
               href="#pricing"
               className="rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-8 py-4 text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300 shadow-lg shadow-emerald-500/20"
             >
-              Unlock Elite — $19.99/mo
+              Unlock Mezan Research — $13.99/mo
             </a>
             <a
               href="#preview"
@@ -172,56 +172,64 @@ export default function ElitePage() {
       {/* PRICING */}
       <section id="pricing" className="mx-auto max-w-7xl px-6 py-24">
         <div className="text-center">
-          <h2 className="text-3xl font-bold md:text-4xl">Simple pricing</h2>
-          <p className="mt-4 text-white/40">One plan. Everything included. No upsells.</p>
+          <h2 className="text-3xl font-bold md:text-4xl">Mezan Research Pricing</h2>
+          <p className="mt-4 text-white/40">Full research platform + free Mezan Investing app Elite access.</p>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-4xl gap-6 md:grid-cols-2">
-          {/* PRO */}
+        <div className="mx-auto mt-16 grid max-w-3xl gap-6 md:grid-cols-2">
+          {/* MONTHLY */}
           <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8">
-            <p className="text-sm font-medium text-white/50">Pro</p>
+            <p className="text-sm font-medium text-white/50">Monthly</p>
             <div className="mt-4 flex items-baseline gap-1">
-              <span className="text-4xl font-bold">$7.99</span>
+              <span className="text-5xl font-bold">$13.99</span>
               <span className="text-white/40">/month</span>
             </div>
-            <p className="mt-2 text-sm text-white/30">For investors getting started</p>
+            <p className="mt-2 text-sm text-white/30">Cancel anytime</p>
 
-            <ul className="mt-8 space-y-3">
-              {proFeatures.map((f) => (
+            <div className="mt-6 rounded-lg bg-emerald-500/10 px-4 py-3">
+              <p className="text-sm font-semibold text-emerald-400">+ App Elite access included FREE</p>
+              <p className="mt-1 text-xs text-white/40">Normally $7.99/mo on App Store</p>
+            </div>
+
+            <ul className="mt-6 space-y-3">
+              {eliteFeatures.map((f) => (
                 <li key={f} className="flex items-start gap-3">
-                  <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-sm text-white/50">{f}</span>
+                  <span className="text-sm text-white/60">{f}</span>
                 </li>
               ))}
             </ul>
 
             <a
-              href="https://apps.apple.com/us/app/mezan-investing/id6755348850"
-              className="mt-8 block w-full rounded-xl border border-white/10 py-3.5 text-center text-sm font-semibold transition hover:border-white/20 hover:bg-white/5"
+              href="/research"
+              className="mt-8 block w-full rounded-xl border border-white/15 py-3.5 text-center text-sm font-semibold transition hover:border-white/25 hover:bg-white/5"
             >
-              Get Pro
+              Subscribe Monthly
             </a>
           </div>
 
-          {/* ELITE */}
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-b from-emerald-500/[0.08] to-transparent p-8">
+          {/* ANNUAL — featured */}
+          <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-b from-emerald-500/[0.08] to-transparent p-8">
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl" />
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black">
+              Save 40%
+            </span>
             <div className="relative">
-              <div className="flex items-center gap-3">
-                <p className="text-sm font-medium text-emerald-400">Elite</p>
-                <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                  Popular
-                </span>
-              </div>
+              <p className="text-sm font-medium text-emerald-400">Annual</p>
               <div className="mt-4 flex items-baseline gap-1">
-                <span className="text-4xl font-bold">$19.99</span>
-                <span className="text-white/40">/month</span>
+                <span className="text-5xl font-bold">$99.99</span>
+                <span className="text-white/40">/year</span>
               </div>
-              <p className="mt-1 text-sm text-emerald-400/60">or $149.99/year (save 37%)</p>
+              <p className="mt-2 text-sm text-emerald-400/70">~$8.33/month · Best value</p>
 
-              <ul className="mt-8 space-y-3">
+              <div className="mt-6 rounded-lg bg-emerald-500/15 px-4 py-3">
+                <p className="text-sm font-semibold text-emerald-400">+ App Elite access included FREE</p>
+                <p className="mt-1 text-xs text-white/40">Normally $7.99/mo on App Store</p>
+              </div>
+
+              <ul className="mt-6 space-y-3">
                 {eliteFeatures.map((f) => (
                   <li key={f} className="flex items-start gap-3">
                     <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -233,10 +241,10 @@ export default function ElitePage() {
               </ul>
 
               <a
-                href="https://apps.apple.com/us/app/mezan-investing/id6755348850"
+                href="/research"
                 className="mt-8 block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 py-3.5 text-center text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300 shadow-lg shadow-emerald-500/20"
               >
-                Unlock Elite Access
+                Subscribe Annual
               </a>
             </div>
           </div>
@@ -281,10 +289,10 @@ export default function ElitePage() {
               Join Muslim investors who use Mezan Elite to make informed, disciplined, halal investment decisions.
             </p>
             <a
-              href="https://apps.apple.com/us/app/mezan-investing/id6755348850"
+              href="/research"
               className="mt-8 inline-block rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-10 py-4 text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300 shadow-lg shadow-emerald-500/20"
             >
-              Start Elite Today
+              Start Mezan Research Today
             </a>
           </div>
         </div>
@@ -375,12 +383,6 @@ const features = [
     tag: "Exclusive",
   },
   {
-    icon: "💼",
-    title: "Junaid&apos;s Portfolio",
-    desc: "Full transparency. See every position, entry, rationale, and exit. Learn by watching real trades in real-time.",
-    tag: null,
-  },
-  {
     icon: "📣",
     title: "Social Buzz",
     desc: "Trending tickers across platforms. Volume and mention tracking to spot momentum before it goes mainstream.",
@@ -433,27 +435,26 @@ const eliteFeatures = [
   "Social Sentiment tracking",
   "Sector Rotation Tracker",
   "Congress & Insider Trades",
-  "Junaid's Portfolio (full transparency)",
   "Social Buzz & trending tickers",
   "Extra AI Credits & custom analysis",
   "Live Swing Webinars + recordings",
 ];
 
 const stats = [
-  { value: "75+", label: "Active Investors" },
+  { value: "150+", label: "Active Investors" },
   { value: "8,000+", label: "Halal Stocks Screened" },
-  { value: "6", label: "Daily Scanners" },
-  { value: "29", label: "Training Modules" },
+  { value: "12", label: "Daily Scanners" },
+  { value: "31", label: "Training Modules" },
 ];
 
 const faqs = [
   {
     q: "What makes Elite different from Pro?",
-    a: "Pro gives you scanners and trade ideas. Elite unlocks the full research suite — AI analysis, social sentiment, insider trades, Junaid's portfolio, live webinars, and custom on-demand research. It's the difference between getting a list and getting the full picture.",
+    a: "Pro gives you scanners and trade ideas. Elite unlocks the full research suite — AI analysis, social sentiment, insider trades, live webinars, and custom on-demand research. It's the difference between getting a list and getting the full picture.",
   },
   {
     q: "Is every stock Halal compliant?",
-    a: "Yes. Every stock in Mezan passes our AAOIFI-inspired compliance framework covering business activity, financial ratios, and revenue analysis. We screen over 8,000 US-listed stocks.",
+    a: "We show every US-listed stock — over 8,000 of them — and calculate a Halal / Not Halal status for each using our AAOIFI-inspired compliance framework (business activity, financial ratios, and revenue analysis). The choice of whether to invest is always yours. We give you the data and the rationale; you make the call.",
   },
   {
     q: "Can I cancel anytime?",
@@ -469,6 +470,6 @@ const faqs = [
   },
   {
     q: "What's the annual plan?",
-    a: "$149.99/year — that's $12.50/month, saving you 37% compared to monthly billing. Most of our serious investors choose annual.",
+    a: "$99.99/year — that's about $8.33/month, saving you 40% compared to monthly billing. Most of our serious investors choose annual.",
   },
 ];

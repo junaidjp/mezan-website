@@ -200,7 +200,6 @@ export default function ResearchDashboard() {
         {activeTab === "sentiment" && <SentimentTab />}
         {activeTab === "insider" && <InsiderTab />}
         {activeTab === "rotation" && <RotationTab />}
-        {activeTab === "portfolio" && <PortfolioTab />}
       </div>
     </main>
   );
@@ -214,7 +213,6 @@ const tabs = [
   { id: "sentiment", label: "Sentiment" },
   { id: "insider", label: "Insiders" },
   { id: "rotation", label: "Rotation" },
-  { id: "portfolio", label: "Junaid's Portfolio" },
 ];
 
 // ===== STOCK CARD COMPONENT =====
@@ -599,49 +597,6 @@ function RotationTab() {
   );
 }
 
-// ===== TAB: PORTFOLIO =====
-function PortfolioTab() {
-  return (
-    <div>
-      <SectionHeader title="Junaid's Portfolio" subtitle="Full transparency — every position, entry, and rationale" />
-      <div className="mb-6 grid grid-cols-3 gap-4">
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-center">
-          <p className="text-2xl font-bold text-emerald-400">$142,500</p>
-          <p className="text-xs text-white/30">Portfolio Value</p>
-        </div>
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-center">
-          <p className="text-2xl font-bold text-emerald-400">+18.4%</p>
-          <p className="text-xs text-white/30">YTD Return</p>
-        </div>
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 text-center">
-          <p className="text-2xl font-bold">8</p>
-          <p className="text-xs text-white/30">Open Positions</p>
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {portfolioPositions.map((p) => (
-          <div key={p.ticker} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-            <div className="flex items-center gap-3">
-              <div className={`h-1.5 w-1.5 rounded-full ${p.pnl >= 0 ? "bg-emerald-400" : "bg-red-400"}`} />
-              <div>
-                <p className="font-semibold">{p.ticker}</p>
-                <p className="text-xs text-white/30">Entry: ${p.entry} | {p.shares} shares</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className={`font-semibold ${p.pnl >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                {p.pnl >= 0 ? "+" : ""}{p.pnl}%
-              </p>
-              <p className="text-xs text-white/30">{p.date}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ===== MOCK DATA =====
 
 type StockData = {
@@ -725,13 +680,3 @@ const sectorData = [
   { sector: "Utilities", icon: "💡", change: -0.4, flow: "Slight outflow" },
 ];
 
-const portfolioPositions = [
-  { ticker: "NVDA", entry: 195.50, shares: 50, pnl: 11.7, date: "Apr 1" },
-  { ticker: "AAPL", entry: 260.00, shares: 30, pnl: 5.1, date: "Mar 28" },
-  { ticker: "CRDO", entry: 165.00, shares: 40, pnl: 14.8, date: "Mar 20" },
-  { ticker: "ARM", entry: 190.00, shares: 25, pnl: 14.9, date: "Mar 15" },
-  { ticker: "AVGO", entry: 230.00, shares: 20, pnl: 6.9, date: "Mar 10" },
-  { ticker: "MSFT", entry: 420.00, shares: 15, pnl: 2.9, date: "Feb 28" },
-  { ticker: "HIMS", entry: 22.00, shares: 200, pnl: 31.9, date: "Feb 15" },
-  { ticker: "COST", entry: 960.00, shares: 5, pnl: 4.6, date: "Feb 10" },
-];
