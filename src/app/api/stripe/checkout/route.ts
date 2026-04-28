@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-01-27.acacia" as any,
-});
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("Stripe not configured");
+  return new Stripe(key, { apiVersion: "2025-01-27.acacia" as any });
+}
 
-const PRICE_ID = process.env.STRIPE_PRICE_ID_RESEARCH_MONTHLY!;
+const PRICE_MONTHLY = process.env.STRIPE_PRICE_ID_RESEARCH_MONTHLY || "";
+const PRICE_ANNUAL = process.env.STRIPE_PRICE_ID_RESEARCH_ANNUAL || "";
 const SUCCESS_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 /**
@@ -14,9 +17,15 @@ const SUCCESS_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
  */
 export async function POST(req: NextRequest) {
   try {
-    const { uid, email } = await req.json();
+    const stripe = getStripe();
+    const { uid, email, plan } = await req.json();
     if (!uid || !email) {
       return NextResponse.json({ error: "Missing uid or email" }, { status: 400 });
+    }
+
+    const PRICE_ID = plan === "annual" ? PRICE_ANNUAL : PRICE_MONTHLY;
+    if (!PRICE_ID) {
+      return NextResponse.json({ error: "Plan not configured" }, { status: 500 });
     }
 
     // Create or retrieve Stripe customer for this Firebase user
