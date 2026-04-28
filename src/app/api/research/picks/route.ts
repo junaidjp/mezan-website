@@ -54,7 +54,7 @@ export async function GET() {
     // Fetch ticker_levels for technicals
     const levelDocs = await db
       .collection("ticker_levels")
-      .find({ _id: { $in: tickers } })
+      .find({ _id: { $in: tickers } as any })
       .toArray();
     const levelsMap = new Map(levelDocs.map((l) => [l._id, l]));
 
@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
     } catch {}
 
     await db.collection("research_picks").updateOne(
-      { _id: t },
+      { _id: t as any },
       {
         $set: {
           ticker: t,
@@ -162,7 +162,7 @@ export async function DELETE(req: NextRequest) {
     if (!t) return NextResponse.json({ error: "ticker required" }, { status: 400 });
 
     const db = await getMongo();
-    await db.collection("research_picks").deleteOne({ _id: t });
+    await db.collection("research_picks").deleteOne({ _id: t as any });
 
     return NextResponse.json({ status: "removed", ticker: t });
   } catch (e) {

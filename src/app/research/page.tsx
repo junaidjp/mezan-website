@@ -71,34 +71,69 @@ export default function ResearchDashboard() {
             and curated halal investment recommendations.
           </p>
 
-          <div className="mt-8 rounded-2xl border border-emerald-500/20 bg-white/[0.02] p-6">
-            <p className="text-sm font-medium text-emerald-400">Mezan Research Subscription</p>
-            <div className="mt-2 flex items-baseline justify-center gap-1">
-              <span className="text-4xl font-bold text-white">$13.99</span>
-              <span className="text-white/40">/month</span>
+          {/* Features list */}
+          <ul className="mt-6 space-y-2 text-left text-sm text-white/50 mx-auto max-w-md">
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> 300+ growth companies + 140+ liquid stocks</li>
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Daily support, resistance & technicals</li>
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Mezan AI analysis with bull/risk cases</li>
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Analyst ratings & price targets</li>
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Sales & EPS growth data</li>
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Social sentiment tracking</li>
+            <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> App Elite access included</li>
+          </ul>
+
+          {/* Pricing options */}
+          <div className="mt-8 grid gap-3 md:grid-cols-2">
+            {/* Monthly */}
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+              <p className="text-xs font-medium text-white/50 uppercase tracking-wider">Monthly</p>
+              <div className="mt-2 flex items-baseline justify-center gap-1">
+                <span className="text-3xl font-bold text-white">$13.99</span>
+                <span className="text-white/40 text-sm">/mo</span>
+              </div>
+              <p className="mt-1 text-xs text-white/30">Cancel anytime</p>
+              <button
+                onClick={async () => {
+                  const res = await fetch("/api/stripe/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ uid: user.uid, email: user.email, plan: "monthly" }),
+                  });
+                  const data = await res.json();
+                  if (data.url) window.location.href = data.url;
+                }}
+                className="mt-4 block w-full rounded-xl border border-white/15 py-2.5 text-center text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/5"
+              >
+                Choose Monthly
+              </button>
             </div>
-            <ul className="mt-4 space-y-2 text-left text-sm text-white/50">
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Full stock research for any ticker</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> AI-powered analysis & recommendations</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Technical indicators & S/R levels</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Analyst ratings & price targets</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> Social sentiment tracking</li>
-              <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> App Elite access included</li>
-            </ul>
-            <button
-              onClick={async () => {
-                const res = await fetch("/api/stripe/checkout", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ uid: user.uid, email: user.email }),
-                });
-                const data = await res.json();
-                if (data.url) window.location.href = data.url;
-              }}
-              className="mt-6 block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 py-3 text-center text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300"
-            >
-              Subscribe Now
-            </button>
+
+            {/* Annual — featured */}
+            <div className="relative rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/[0.08] to-transparent p-5">
+              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black">
+                Save 40%
+              </span>
+              <p className="text-xs font-medium text-emerald-400 uppercase tracking-wider">Annual</p>
+              <div className="mt-2 flex items-baseline justify-center gap-1">
+                <span className="text-3xl font-bold text-white">$99.99</span>
+                <span className="text-white/40 text-sm">/yr</span>
+              </div>
+              <p className="mt-1 text-xs text-emerald-400/70">~$8.33/month · Best value</p>
+              <button
+                onClick={async () => {
+                  const res = await fetch("/api/stripe/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ uid: user.uid, email: user.email, plan: "annual" }),
+                  });
+                  const data = await res.json();
+                  if (data.url) window.location.href = data.url;
+                }}
+                className="mt-4 block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 py-2.5 text-center text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300"
+              >
+                Choose Annual
+              </button>
+            </div>
           </div>
 
           <p className="mt-4 text-xs text-white/25">

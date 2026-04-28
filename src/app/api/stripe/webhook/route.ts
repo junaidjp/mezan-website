@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-01-27.acacia" as any,
-});
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("Stripe not configured");
+  return new Stripe(key, { apiVersion: "2025-01-27.acacia" as any });
+}
 
-const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET!;
 const BACKEND_URL = process.env.BACKEND_URL || "https://compliance-check-api-223407081609.us-central1.run.app";
-const ADMIN_KEY = process.env.ADMIN_API_KEY!;
 
 /**
  * Stripe webhook handler — updates researchAccess + eliteApproved
@@ -20,6 +20,9 @@ export async function POST(req: NextRequest) {
   if (!signature) {
     return NextResponse.json({ error: "No signature" }, { status: 400 });
   }
+
+  const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || "";
+  const stripe = getStripe();
 
   let event: Stripe.Event;
   try {
@@ -68,6 +71,7 @@ export async function POST(req: NextRequest) {
  * Call backend to set researchAccess + eliteApproved flags
  */
 async function updateUserAccess(uid: string, active: boolean) {
+  const ADMIN_KEY = process.env.ADMIN_API_KEY || "";
   const res = await fetch(`${BACKEND_URL}/api/v1/admin/users/${uid}/research-access`, {
     method: "POST",
     headers: {
