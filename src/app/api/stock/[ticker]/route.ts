@@ -400,24 +400,26 @@ export async function GET(
   const r2 = (n: number) => (n ? Math.round(n * 100) / 100 : 0);
 
   // Derive real AI signal/confidence from technical sentiment scores
+  // Short and mid term weigh more than long term for swing-research timeframe
   const stScore = Number(liveTechnicals?.shortTermScore) || 0;
   const mtScore = Number(liveTechnicals?.midTermScore) || 0;
   const ltScore = Number(liveTechnicals?.longTermScore) || 0;
   const haveScores = stScore > 0 || mtScore > 0 || ltScore > 0;
-  const avgScore = haveScores ? (stScore + mtScore + ltScore) / 3 : 0;
+  // Weighted: short=2x, mid=2x, long=1x → divide by 5
+  const weightedScore = haveScores ? (stScore * 2 + mtScore * 2 + ltScore) / 5 : 0;
 
   let aiSignal: "BUY" | "HOLD" | "SELL" = "HOLD";
   let aiConfidence: "HIGH" | "MEDIUM" | "LOW" = "LOW";
   if (haveScores) {
-    if (avgScore >= 3.5) aiSignal = "BUY";
-    else if (avgScore <= 1.5) aiSignal = "SELL";
+    // Strong primary trend (short + mid both ≥ Strong) → BUY regardless of long-term
+    if (stScore >= 4 && mtScore >= 4) aiSignal = "BUY";
+    else if (stScore <= 1 && mtScore <= 1) aiSignal = "SELL";
+    else if (weightedScore >= 3.2) aiSignal = "BUY";
+    else if (weightedScore <= 1.5) aiSignal = "SELL";
     else aiSignal = "HOLD";
 
-    const minScore = Math.min(stScore, mtScore, ltScore);
-    const maxScore = Math.max(stScore, mtScore, ltScore);
-    const spread = maxScore - minScore;
-    if (avgScore >= 4 && spread <= 1) aiConfidence = "HIGH";
-    else if (avgScore <= 1 && spread <= 1) aiConfidence = "HIGH";
+    const spread = Math.max(stScore, mtScore, ltScore) - Math.min(stScore, mtScore, ltScore);
+    if ((weightedScore >= 3.8 || weightedScore <= 1) && spread <= 2) aiConfidence = "HIGH";
     else if (spread <= 2) aiConfidence = "MEDIUM";
     else aiConfidence = "LOW";
   }
