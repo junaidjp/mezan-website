@@ -133,9 +133,21 @@ export default function StockDetailPage() {
 
           {/* Halal + AI Badges */}
           <div className="mt-5 flex items-center gap-3">
-            <span className="rounded-lg bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400">
-              HALAL
-            </span>
+            {(() => {
+              const s = stock.halal?.status || "UNKNOWN";
+              const cfg = s === "HALAL"
+                ? { bg: "bg-emerald-500/10", text: "text-emerald-400", label: "HALAL" }
+                : s === "NOT_HALAL"
+                ? { bg: "bg-red-500/10", text: "text-red-400", label: "NOT HALAL" }
+                : s === "QUESTIONABLE"
+                ? { bg: "bg-amber-500/10", text: "text-amber-400", label: "QUESTIONABLE" }
+                : { bg: "bg-white/5", text: "text-white/50", label: "UNKNOWN" };
+              return (
+                <span className={`rounded-lg ${cfg.bg} px-3 py-1 text-xs font-bold ${cfg.text}`}>
+                  {cfg.label}
+                </span>
+              );
+            })()}
             <span className="rounded-lg bg-blue-500/10 px-3 py-1 text-xs font-bold text-blue-400">
               AI: {stock.aiConfidence}
             </span>
@@ -1198,21 +1210,30 @@ function NewsTab({ ticker }: { ticker: string }) {
 }
 
 function HalalTab({ stock, ticker }: { stock: StockInfo; ticker: string }) {
+  const s = stock.halal?.status || "UNKNOWN";
+  const cfg = s === "HALAL"
+    ? { bg: "bg-emerald-500/10", text: "text-emerald-400", icon: "✔", label: "HALAL", subtitle: "Passes AAOIFI screening" }
+    : s === "NOT_HALAL"
+    ? { bg: "bg-red-500/10", text: "text-red-400", icon: "✖", label: "NOT HALAL", subtitle: stock.halal?.nonHalalReason || "Fails AAOIFI screening" }
+    : s === "QUESTIONABLE"
+    ? { bg: "bg-amber-500/10", text: "text-amber-400", icon: "?", label: "QUESTIONABLE", subtitle: "Borderline — review reasoning below" }
+    : { bg: "bg-white/5", text: "text-white/50", icon: "?", label: "UNKNOWN", subtitle: "No compliance data available" };
+
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <Card title="Halal Compliance Report">
         <div className="flex items-center gap-4 mb-6">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10">
-            <span className="text-2xl">&#x2714;</span>
+          <div className={`flex h-16 w-16 items-center justify-center rounded-2xl ${cfg.bg}`}>
+            <span className="text-2xl">{cfg.icon}</span>
           </div>
           <div>
-            <p className="text-lg font-bold text-emerald-400">HALAL</p>
-            <p className="text-sm text-white/40">Passes AAOIFI screening</p>
+            <p className={`text-lg font-bold ${cfg.text}`}>{cfg.label}</p>
+            <p className="text-sm text-white/40">{cfg.subtitle}</p>
           </div>
         </div>
 
-        <StatRow label="Business Activity" value="COMPLIANT" />
-        <StatRow label="Revenue Compliance" value="100% Compliant" />
+        <StatRow label="Business Activity" value={stock.halal?.businessActivity || "UNKNOWN"} />
+        <StatRow label="Revenue Compliance" value={s === "HALAL" ? "100% Compliant" : s === "NOT_HALAL" ? "Non-compliant" : "—"} />
         <StatRow label="Debt / Market Cap" value={`${stock.halal.debtRatio}%`} sub={stock.halal.debtRatio < 33 ? "PASS" : "FAIL"} />
         <StatRow label="Cash / Market Cap" value={`${stock.halal.cashRatio}%`} sub={stock.halal.cashRatio < 33 ? "PASS" : "FAIL"} />
         <StatRow label="Interest Income" value={`${stock.halal.interestIncome}%`} sub={stock.halal.interestIncome < 5 ? "PASS" : "FAIL"} />
