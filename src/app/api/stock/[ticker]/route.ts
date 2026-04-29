@@ -399,6 +399,39 @@ export async function GET(
   const pct = (n: number) => (n ? `${(n * 100).toFixed(2)}%` : "0%");
   const r2 = (n: number) => (n ? Math.round(n * 100) / 100 : 0);
 
+  // Derive real AI signal/confidence from technical sentiment scores
+  const stScore = Number(liveTechnicals?.shortTermScore) || 0;
+  const mtScore = Number(liveTechnicals?.midTermScore) || 0;
+  const ltScore = Number(liveTechnicals?.longTermScore) || 0;
+  const haveScores = stScore > 0 || mtScore > 0 || ltScore > 0;
+  const avgScore = haveScores ? (stScore + mtScore + ltScore) / 3 : 0;
+
+  let aiSignal: "BUY" | "HOLD" | "SELL" = "HOLD";
+  let aiConfidence: "HIGH" | "MEDIUM" | "LOW" = "LOW";
+  if (haveScores) {
+    if (avgScore >= 3.5) aiSignal = "BUY";
+    else if (avgScore <= 1.5) aiSignal = "SELL";
+    else aiSignal = "HOLD";
+
+    const minScore = Math.min(stScore, mtScore, ltScore);
+    const maxScore = Math.max(stScore, mtScore, ltScore);
+    const spread = maxScore - minScore;
+    if (avgScore >= 4 && spread <= 1) aiConfidence = "HIGH";
+    else if (avgScore <= 1 && spread <= 1) aiConfidence = "HIGH";
+    else if (spread <= 2) aiConfidence = "MEDIUM";
+    else aiConfidence = "LOW";
+  }
+
+  // ATR-based entry/stop/target (1:2 R/R from current price)
+  const atrVal = Number(liveTechnicals?.atr) || (quote.price * 0.02);
+  const aiEntry = r2(quote.price);
+  const aiStop = aiSignal === "SELL"
+    ? r2(quote.price + atrVal * 1.5)
+    : r2(quote.price - atrVal * 1.5);
+  const aiTarget = aiSignal === "SELL"
+    ? r2(quote.price - atrVal * 3)
+    : r2(quote.price + atrVal * 3);
+
   const result = {
     name: profile.companyName || quote.name || t,
     exchange: profile.exchangeShortName || quote.exchange || "NASDAQ",
@@ -422,13 +455,13 @@ export async function GET(
     dividendYield: pct(profile.lastDiv / (quote.price || 1)),
     sharesOutstanding: fmt(profile.mktCap / (quote.price || 1)),
 
-    // AI placeholders (will be populated by compute_levels.py)
-    aiSignal: "BUY",
-    aiConfidence: "HIGH",
-    aiEntry: r2(quote.price * 0.99)?.toString(),
-    aiStop: r2(quote.price * 0.97)?.toString(),
-    aiTarget: r2(quote.price * 1.06)?.toString(),
-    aiRR: "1:3",
+    // AI signal derived from technical sentiment scores (short + mid + long term)
+    aiSignal,
+    aiConfidence,
+    aiEntry: aiEntry?.toString(),
+    aiStop: aiStop?.toString(),
+    aiTarget: aiTarget?.toString(),
+    aiRR: "1:2",
     aiAnalysis: `${profile.companyName || t} is currently trading at $${r2(quote.price)} with a P/E ratio of ${r2(quote.pe)}. The stock is ${quote.changesPercentage >= 0 ? "up" : "down"} ${Math.abs(r2(quote.changesPercentage))}% today. Market cap stands at ${fmt(quote.marketCap)} in the ${profile.sector || "Technology"} sector.`,
 
     // S/R: live computed > ticker_levels > estimate
