@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import { BigQuery } from "@google-cloud/bigquery";
 
+// Force this route to run dynamically on every request — without this Next.js
+// can serve a static-cached response for hours/days even though the underlying
+// fetches use revalidate: 60.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Simple rate limiter: max 60 requests per minute per IP
 const rateLimit = new Map<string, { count: number; resetAt: number }>();
 
@@ -50,10 +56,12 @@ async function fmpStableGet(path: string) {
   return res.json();
 }
 
-async function fmpGet(path: string) {
+async function fmpGet(path: string, opts?: { fresh?: boolean }) {
   const sep = path.includes("?") ? "&" : "?";
   const res = await fetch(`${FMP}${path}${sep}apikey=${FMP_KEY}`, {
-    next: { revalidate: 300 }, // cache 5 min
+    // Quote/price calls bypass the cache entirely.
+    // Other endpoints (profile, fundamentals, news) cache 60s.
+    ...(opts?.fresh ? { cache: "no-store" } : { next: { revalidate: 60 } }),
   });
   if (!res.ok) return null;
   return res.json();
@@ -116,7 +124,7 @@ export async function GET(
     socialSentimentData,
     institutionalSummaryData,
   ] = await Promise.all([
-    fmpGet(`/quote/${t}`),
+    fmpGet(`/quote/${t}`, { fresh: true }),
     fmpGet(`/profile/${t}`),
     fmpGet(`/ratios-ttm/${t}`),
     fmpGet(`/income-statement/${t}?period=annual&limit=1`),

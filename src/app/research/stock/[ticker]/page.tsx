@@ -127,7 +127,17 @@ export default function StockDetailPage() {
               <p className={`mt-1 text-lg font-semibold ${stock.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
                 {stock.change >= 0 ? "+" : ""}{stock.changeAmt.toFixed(2)} ({stock.change >= 0 ? "+" : ""}{stock.change.toFixed(2)}%)
               </p>
-              <p className="mt-1 text-xs text-white/30">As of Apr 24, 2026 4:00 PM ET</p>
+              <p className="mt-1 text-xs text-white/30">
+                As of {new Date().toLocaleString("en-US", {
+                  timeZone: "America/New_York",
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                  hour12: true,
+                })} ET
+              </p>
             </div>
           </div>
 
