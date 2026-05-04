@@ -205,6 +205,9 @@ export default function Home() {
               Delete Account
             </a>
           </div>
+          <p className="text-white/40">
+            © {new Date().getFullYear()} Nafitech LLC. All rights reserved. Mezan Investing is a product of Nafitech LLC.
+          </p>
         </footer>
       </section>
     </main>

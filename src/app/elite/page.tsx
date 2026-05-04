@@ -315,6 +315,9 @@ export default function ElitePage() {
               <a href="/delete-account" className="hover:text-white transition">Delete Account</a>
             </div>
           </div>
+          <p className="mt-6 text-center text-xs text-white/30">
+            © {new Date().getFullYear()} Nafitech LLC. All rights reserved. Mezan Investing is a product of Nafitech LLC.
+          </p>
         </div>
       </footer>
     </main>
