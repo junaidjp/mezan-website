@@ -562,6 +562,40 @@ function OverviewTab({ stock, ticker }: { stock: StockInfo; ticker: string }) {
           </div>
         </Card>
 
+        {/* Company Thesis — what they do + bull/bear demand case */}
+        {stock.thesis && (
+          <Card title="Company & Investment Thesis">
+            <div className="space-y-5">
+              {stock.thesis.businessSummary && (
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-white/40">What they do</p>
+                  <p className="text-sm leading-relaxed text-white/70">{stock.thesis.businessSummary}</p>
+                </div>
+              )}
+              {stock.thesis.bullCase && (
+                <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/[0.04] p-4">
+                  <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+                    <span>&#x25B2;</span> Bull Case — Demand Story
+                  </p>
+                  <p className="text-sm leading-relaxed text-white/70">{stock.thesis.bullCase}</p>
+                </div>
+              )}
+              {stock.thesis.bearCase && (
+                <div className="rounded-xl border border-red-500/15 bg-red-500/[0.04] p-4">
+                  <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-red-400">
+                    <span>&#x25BC;</span> Bear Case — Risks to Demand
+                  </p>
+                  <p className="text-sm leading-relaxed text-white/70">{stock.thesis.bearCase}</p>
+                </div>
+              )}
+              <p className="text-[10px] text-white/25">
+                {stock.thesis.source === "manual" ? "Editorial — Mezan Research" : "AI-generated, refreshed monthly"}
+                {stock.thesis.generatedAt && ` · ${new Date(stock.thesis.generatedAt).toLocaleDateString()}`}
+              </p>
+            </div>
+          </Card>
+        )}
+
         {/* Pros & Risks */}
         <div className="grid grid-cols-2 gap-4">
           <Card title="Why it could go up">

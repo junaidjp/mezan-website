@@ -53,7 +53,7 @@ export default function ElitePage() {
               href="#pricing"
               className="rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-8 py-4 text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300 shadow-lg shadow-emerald-500/20"
             >
-              Unlock Mezan Research — $13.99/mo
+              Unlock Mezan Research — $15.99/mo
             </a>
             <a
               href="#preview"
@@ -181,7 +181,7 @@ export default function ElitePage() {
           <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-8">
             <p className="text-sm font-medium text-white/50">Monthly</p>
             <div className="mt-4 flex items-baseline gap-1">
-              <span className="text-5xl font-bold">$13.99</span>
+              <span className="text-5xl font-bold">$15.99</span>
               <span className="text-white/40">/month</span>
             </div>
             <p className="mt-2 text-sm text-white/30">Cancel anytime</p>
@@ -210,23 +210,27 @@ export default function ElitePage() {
             </a>
           </div>
 
-          {/* ANNUAL — featured */}
+          {/* ANNUAL — contact-only */}
           <div className="relative overflow-hidden rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-b from-emerald-500/[0.08] to-transparent p-8">
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl" />
             <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black">
-              Save 40%
+              Contact Us
             </span>
             <div className="relative">
               <p className="text-sm font-medium text-emerald-400">Annual</p>
-              <div className="mt-4 flex items-baseline gap-1">
-                <span className="text-5xl font-bold">$99.99</span>
-                <span className="text-white/40">/year</span>
+              <div className="mt-4">
+                <span className="text-3xl font-bold text-white">Custom Pricing</span>
               </div>
-              <p className="mt-2 text-sm text-emerald-400/70">~$8.33/month · Best value</p>
+              <p className="mt-2 text-sm text-emerald-400/70">Personalized — speak with us</p>
 
               <div className="mt-6 rounded-lg bg-emerald-500/15 px-4 py-3">
-                <p className="text-sm font-semibold text-emerald-400">+ App Elite access included FREE</p>
-                <p className="mt-1 text-xs text-white/40">Normally $7.99/mo on App Store</p>
+                <p className="text-sm font-semibold text-emerald-400">Reach out for details</p>
+                <p className="mt-2 text-xs leading-relaxed text-white/60">
+                  Email <a href="mailto:support@mezaninvesting.com" className="text-emerald-400 hover:underline">support@mezaninvesting.com</a>
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-white/60">
+                  Or DM Junaid in his WhatsApp group.
+                </p>
               </div>
 
               <ul className="mt-6 space-y-3">
@@ -241,10 +245,10 @@ export default function ElitePage() {
               </ul>
 
               <a
-                href="/research"
+                href="mailto:support@mezaninvesting.com?subject=Mezan%20Research%20Annual%20Plan"
                 className="mt-8 block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 py-3.5 text-center text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300 shadow-lg shadow-emerald-500/20"
               >
-                Subscribe Annual
+                Contact Support
               </a>
             </div>
           </div>
@@ -470,6 +474,6 @@ const faqs = [
   },
   {
     q: "What's the annual plan?",
-    a: "$99.99/year — that's about $8.33/month, saving you 40% compared to monthly billing. Most of our serious investors choose annual.",
+    a: "Annual pricing is custom. Email support@mezaninvesting.com or DM Junaid in his WhatsApp group for details — we'll match the right plan to your needs.",
   },
 ];

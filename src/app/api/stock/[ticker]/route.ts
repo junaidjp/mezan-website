@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { MongoClient } from "mongodb";
 import { BigQuery } from "@google-cloud/bigquery";
+import { getOrGenerateCompanyThesis } from "@/lib/companyThesis";
 
 // Force this route to run dynamically on every request — without this Next.js
 // can serve a static-cached response for hours/days even though the underlying
@@ -1156,7 +1157,26 @@ export async function GET(
       nonHalalReason: halalDoc?.nonHalalReason || null,
       reasonBreakdown: halalDoc?.reasonBreakdown || [],
     },
-  };
+  } as any;
+
+  // Company thesis (LLM-generated + Mongo-cached for 30 days, manual override-friendly).
+  // Don't fail the whole request if this errors — just omit the field.
+  try {
+    const mongoDB = await getMongo();
+    const thesis = await getOrGenerateCompanyThesis(
+      t,
+      {
+        companyName: profile.companyName,
+        industry: profile.industry,
+        sector: profile.sector,
+        description: profile.description,
+      },
+      mongoDB,
+    );
+    if (thesis) result.thesis = thesis;
+  } catch (e) {
+    console.warn(`[stock] thesis lookup failed for ${t}:`, (e as Error).message);
+  }
 
   return NextResponse.json(result);
 }
