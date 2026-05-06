@@ -82,58 +82,21 @@ export default function ResearchDashboard() {
             <li className="flex items-center gap-2"><span className="text-emerald-400">✓</span> App Elite access included</li>
           </ul>
 
-          {/* Pricing options */}
-          <div className="mt-8 grid gap-3 md:grid-cols-2">
-            {/* Monthly */}
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-              <p className="text-xs font-medium text-white/50 uppercase tracking-wider">Monthly</p>
-              <div className="mt-2 flex items-baseline justify-center gap-1">
-                <span className="text-3xl font-bold text-white">$13.99</span>
-                <span className="text-white/40 text-sm">/mo</span>
-              </div>
-              <p className="mt-1 text-xs text-white/30">Cancel anytime</p>
-              <button
-                onClick={async () => {
-                  const res = await fetch("/api/stripe/checkout", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ uid: user.uid, email: user.email, plan: "monthly" }),
-                  });
-                  const data = await res.json();
-                  if (data.url) window.location.href = data.url;
-                }}
-                className="mt-4 block w-full rounded-xl border border-white/15 py-2.5 text-center text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/5"
-              >
-                Choose Monthly
-              </button>
-            </div>
-
-            {/* Annual — featured */}
-            <div className="relative rounded-2xl border-2 border-emerald-500/40 bg-gradient-to-br from-emerald-500/[0.08] to-transparent p-5">
-              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-emerald-500 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black">
-                Save 40%
-              </span>
-              <p className="text-xs font-medium text-emerald-400 uppercase tracking-wider">Annual</p>
-              <div className="mt-2 flex items-baseline justify-center gap-1">
-                <span className="text-3xl font-bold text-white">$99.99</span>
-                <span className="text-white/40 text-sm">/yr</span>
-              </div>
-              <p className="mt-1 text-xs text-emerald-400/70">~$8.33/month · Best value</p>
-              <button
-                onClick={async () => {
-                  const res = await fetch("/api/stripe/checkout", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ uid: user.uid, email: user.email, plan: "annual" }),
-                  });
-                  const data = await res.json();
-                  if (data.url) window.location.href = data.url;
-                }}
-                className="mt-4 block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 py-2.5 text-center text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300"
-              >
-                Choose Annual
-              </button>
-            </div>
+          {/* Subscriptions temporarily closed */}
+          <div className="mt-8 rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-6 text-center">
+            <p className="text-sm font-bold uppercase tracking-wider text-amber-400">
+              Subscriptions Currently Closed
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">
+              We&apos;re paused for new sign-ups while we put final touches on the platform. Existing subscribers continue to have full access — nothing changes for you.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-white/70">
+              We&apos;ll reopen soon. To be notified or request early access, email{" "}
+              <a href="mailto:support@mezaninvesting.com?subject=Mezan%20Research%20-%20Notify%20when%20open" className="text-emerald-400 hover:underline">
+                support@mezaninvesting.com
+              </a>{" "}
+              or DM Junaid in his WhatsApp group.
+            </p>
           </div>
 
           <p className="mt-4 text-xs text-white/25">
@@ -163,7 +126,13 @@ export default function ResearchDashboard() {
               {tabs.map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => setActiveTab(t.id)}
+                  onClick={() => {
+                    if (t.route) {
+                      router.push(t.route);
+                    } else {
+                      setActiveTab(t.id);
+                    }
+                  }}
                   className={`rounded-lg px-3 py-1.5 text-sm transition ${
                     activeTab === t.id
                       ? "bg-emerald-500/10 text-emerald-400 font-medium"
@@ -205,8 +174,9 @@ export default function ResearchDashboard() {
   );
 }
 
-const tabs = [
+const tabs: Array<{ id: string; label: string; route?: string }> = [
   { id: "research", label: "Recommendations" },
+  { id: "screener", label: "Screener", route: "/research/screener" },
   { id: "hotlists", label: "Hot Lists" },
   { id: "ai", label: "Mezan AI" },
   { id: "news", label: "News" },

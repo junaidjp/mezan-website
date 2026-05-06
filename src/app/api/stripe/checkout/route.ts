@@ -12,11 +12,24 @@ const PRICE_ANNUAL = process.env.STRIPE_PRICE_ID_RESEARCH_ANNUAL || "";
 const SUCCESS_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 /**
- * Create a Stripe checkout session for Mezan Research $13.99/mo subscription
- * Body: { uid, email }
+ * Create a Stripe checkout session for Mezan Research subscription.
+ * Body: { uid, email, plan }
+ *
+ * Subscriptions are temporarily closed to new sign-ups. Set
+ * `SUBSCRIPTIONS_OPEN=true` env var to reopen.
  */
 export async function POST(req: NextRequest) {
   try {
+    if (process.env.SUBSCRIPTIONS_OPEN !== "true") {
+      return NextResponse.json(
+        {
+          error: "subscriptions_closed",
+          message:
+            "Mezan Research is temporarily closed to new subscribers. Email support@mezaninvesting.com or DM Junaid in his WhatsApp group to be notified when we reopen.",
+        },
+        { status: 503 },
+      );
+    }
     const stripe = getStripe();
     const { uid, email, plan } = await req.json();
     if (!uid || !email) {
