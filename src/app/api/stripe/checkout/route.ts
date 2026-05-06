@@ -15,25 +15,41 @@ const SUCCESS_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
  * Create a Stripe checkout session for Mezan Research subscription.
  * Body: { uid, email, plan }
  *
- * Subscriptions are temporarily closed to new sign-ups. Set
- * `SUBSCRIPTIONS_OPEN=true` env var to reopen.
+ * Per-plan gates:
+ *   SUBSCRIPTIONS_MONTHLY_OPEN=true  → monthly available
+ *   SUBSCRIPTIONS_ANNUAL_OPEN=true   → annual available
+ * Anything else (unset / "false") closes that plan.
  */
 export async function POST(req: NextRequest) {
   try {
-    if (process.env.SUBSCRIPTIONS_OPEN !== "true") {
-      return NextResponse.json(
-        {
-          error: "subscriptions_closed",
-          message:
-            "Mezan Research is temporarily closed to new subscribers. Email support@mezaninvesting.com or DM Junaid in his WhatsApp group to be notified when we reopen.",
-        },
-        { status: 503 },
-      );
-    }
     const stripe = getStripe();
     const { uid, email, plan } = await req.json();
     if (!uid || !email) {
       return NextResponse.json({ error: "Missing uid or email" }, { status: 400 });
+    }
+
+    const monthlyOpen = process.env.SUBSCRIPTIONS_MONTHLY_OPEN === "true";
+    const annualOpen = process.env.SUBSCRIPTIONS_ANNUAL_OPEN === "true";
+
+    if (plan === "annual" && !annualOpen) {
+      return NextResponse.json(
+        {
+          error: "annual_sold_out",
+          message:
+            "The annual plan is sold out for now. Monthly is still available — or email support@mezaninvesting.com to join the annual waitlist.",
+        },
+        { status: 503 },
+      );
+    }
+    if (plan !== "annual" && !monthlyOpen) {
+      return NextResponse.json(
+        {
+          error: "monthly_closed",
+          message:
+            "Monthly subscriptions are temporarily closed. Email support@mezaninvesting.com to be notified when we reopen.",
+        },
+        { status: 503 },
+      );
     }
 
     const PRICE_ID = plan === "annual" ? PRICE_ANNUAL : PRICE_MONTHLY;

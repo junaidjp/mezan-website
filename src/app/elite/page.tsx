@@ -1,3 +1,5 @@
+import PricingCards from "./PricingCards";
+
 export default function ElitePage() {
   return (
     <main className="min-h-screen bg-[#060a10] text-white">
@@ -176,33 +178,12 @@ export default function ElitePage() {
           <p className="mt-4 text-white/40">Full research platform + free Mezan Investing app Elite access.</p>
         </div>
 
-        {/* CLOSED MESSAGE */}
-        <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-            Subscriptions Closed
-          </span>
-          <h3 className="mt-5 text-2xl font-bold text-white">We&apos;re paused for new sign-ups</h3>
-          <p className="mt-4 text-sm leading-relaxed text-white/70">
-            Mezan Research is temporarily closed to new subscribers while we put final touches on the platform. <strong className="text-white/90">Existing subscribers continue to have full access</strong> — nothing changes for you.
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-white/70">
-            We&apos;ll reopen soon. In the meantime, to be notified or request early access:
-          </p>
-          <div className="mt-6 flex flex-col items-center gap-2 text-sm">
-            <a
-              href="mailto:support@mezaninvesting.com?subject=Mezan%20Research%20-%20Notify%20when%20open"
-              className="rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-6 py-3 text-sm font-bold text-black transition hover:from-emerald-400 hover:to-emerald-300 shadow-lg shadow-emerald-500/20"
-            >
-              Email support@mezaninvesting.com
-            </a>
-            <p className="mt-2 text-xs text-white/50">Or DM Junaid in his WhatsApp group.</p>
-          </div>
-        </div>
+        {/* PRICING CARDS — monthly active, annual sold out */}
+        <PricingCards />
 
-        {/* What you get when we reopen */}
+        {/* What you get */}
         <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-white/10 bg-white/[0.02] p-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-white/40">What you&apos;ll get when we reopen</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/40">What you&apos;ll get</p>
           <ul className="mt-4 space-y-2.5">
             {eliteFeatures.map((f) => (
               <li key={f} className="flex items-start gap-3">
@@ -437,7 +418,7 @@ const faqs = [
     a: "Scanners update daily. News and social sentiment refresh throughout the day. AI analysis runs on the latest available market data. Charts are real-time via TradingView.",
   },
   {
-    q: "What's the annual plan?",
-    a: "Annual pricing is custom. Email support@mezaninvesting.com or DM Junaid in his WhatsApp group for details — we'll match the right plan to your needs.",
+    q: "Is the annual plan available?",
+    a: "Annual is currently sold out — we cap annual seats to keep the experience high-quality. Monthly is fully available, and you can join the annual waitlist by emailing support@mezaninvesting.com. We'll let you know as soon as a spot opens up.",
   },
 ];
