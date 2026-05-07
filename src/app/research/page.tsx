@@ -302,9 +302,22 @@ function ResearchListsTab() {
 }
 
 // ===== TAB: HOT LISTS =====
+type SortKey = "default" | "name" | "marketCap" | "price" | "change";
+type SortDir = "asc" | "desc";
+
+const fmtMcap = (n: number) => {
+  if (!n || n <= 0) return "—";
+  if (n >= 1e12) return `$${(n / 1e12).toFixed(2)}T`;
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(1)}B`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(0)}M`;
+  return `$${n.toLocaleString()}`;
+};
+
 function HotListsTab() {
   const [hotlists, setHotlists] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortKey, setSortKey] = useState<SortKey>("default");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   useEffect(() => {
     fetch("/api/research/hotlists")
@@ -313,6 +326,36 @@ function HotListsTab() {
       .catch(() => setHotlists([]))
       .finally(() => setLoading(false));
   }, []);
+
+  const sortPills: { key: SortKey; label: string; defaultDir: SortDir }[] = [
+    { key: "default", label: "Default", defaultDir: "desc" },
+    { key: "name", label: "Name", defaultDir: "asc" },
+    { key: "marketCap", label: "Market Cap", defaultDir: "desc" },
+    { key: "price", label: "Price", defaultDir: "desc" },
+    { key: "change", label: "Change %", defaultDir: "desc" },
+  ];
+
+  const handleSortClick = (key: SortKey, defaultDir: SortDir) => {
+    if (sortKey === key) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortDir(defaultDir);
+    }
+  };
+
+  const sortTickers = (tickers: any[]) => {
+    if (sortKey === "default") return tickers;
+    const dir = sortDir === "asc" ? 1 : -1;
+    return [...tickers].sort((a, b) => {
+      if (sortKey === "name") {
+        return (a.ticker || "").localeCompare(b.ticker || "") * dir;
+      }
+      const av = Number(a[sortKey]) || 0;
+      const bv = Number(b[sortKey]) || 0;
+      return (av - bv) * dir;
+    });
+  };
 
   if (loading) {
     return (
@@ -325,6 +368,32 @@ function HotListsTab() {
   return (
     <div>
       <SectionHeader title="Hot Lists & Themes" subtitle="Curated tickers grouped by sector themes and catalysts" />
+
+      {hotlists.length > 0 && (
+        <div className="mb-5 flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-[11px] font-medium uppercase tracking-wider text-white/40">Sort by</span>
+          {sortPills.map((p) => {
+            const active = sortKey === p.key;
+            return (
+              <button
+                key={p.key}
+                onClick={() => handleSortClick(p.key, p.defaultDir)}
+                className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+                  active
+                    ? "bg-emerald-500/10 text-emerald-400"
+                    : "border border-white/10 text-white/50 hover:text-white/80"
+                }`}
+              >
+                {p.label}
+                {active && p.key !== "default" && (
+                  <span className="text-[10px] opacity-70">{sortDir === "asc" ? "↑" : "↓"}</span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {hotlists.length === 0 ? (
         <p className="text-white/40 text-sm">No themes yet. Add tickers with themes from the admin panel.</p>
       ) : (
@@ -344,17 +413,17 @@ function HotListsTab() {
                 </span>
               </div>
               <div className="mt-4 space-y-2">
-                {theme.tickers.map((t: any) => (
+                {sortTickers(theme.tickers).map((t: any) => (
                   <a
                     key={t.ticker}
                     href={`/research/stock/${t.ticker}`}
                     className="flex items-center justify-between rounded-lg bg-white/[0.03] px-3 py-2.5 transition hover:bg-white/[0.06]"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
                       <span className="text-sm font-semibold">{t.ticker}</span>
-                      <span className="text-xs text-white/30">{t.name}</span>
+                      <span className="truncate text-xs text-white/30">{t.name}</span>
                       {t.conviction && (
-                        <span className={`rounded px-1.5 py-0.5 text-[9px] font-semibold ${
+                        <span className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[9px] font-semibold ${
                           t.conviction === "HIGH" ? "bg-emerald-500/10 text-emerald-400" :
                           t.conviction === "MEDIUM" ? "bg-amber-500/10 text-amber-400" :
                           "bg-white/5 text-white/30"
@@ -363,11 +432,16 @@ function HotListsTab() {
                         </span>
                       )}
                     </div>
-                    <div className="text-right">
-                      <span className="text-sm text-white/70">${t.price?.toFixed(2)}</span>
-                      <span className={`ml-2 text-xs ${t.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
-                        {t.change >= 0 ? "+" : ""}{t.change}%
-                      </span>
+                    <div className="flex flex-shrink-0 flex-col items-end leading-tight">
+                      <div>
+                        <span className="text-sm text-white/70">${t.price?.toFixed(2)}</span>
+                        <span className={`ml-2 text-xs ${t.change >= 0 ? "text-emerald-400" : "text-red-400"}`}>
+                          {t.change >= 0 ? "+" : ""}{t.change}%
+                        </span>
+                      </div>
+                      {t.marketCap > 0 && (
+                        <span className="text-[10px] text-white/30">{fmtMcap(t.marketCap)}</span>
+                      )}
                     </div>
                   </a>
                 ))}
@@ -495,40 +569,103 @@ function SentimentTab() {
 }
 
 // ===== TAB: INSIDER =====
+type InsiderTrade = {
+  ticker: string;
+  name: string;
+  title: string;
+  type: "Insider";
+  action: "Buy" | "Sell";
+  amountFormatted: string;
+  date: string;
+  formType?: string;
+  url?: string | null;
+};
+
 function InsiderTab() {
+  const router = useRouter();
+  const [trades, setTrades] = useState<InsiderTrade[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<"all" | "buy" | "sell">("all");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/research/insiders/latest?limit=100", { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!cancelled) setTrades(Array.isArray(data) ? data : []);
+      } catch (e: any) {
+        if (!cancelled) setError(e.message || "Failed to load");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const filtered = (trades || []).filter((t) =>
+    filter === "all" ? true : filter === "buy" ? t.action === "Buy" : t.action === "Sell"
+  );
+
   return (
     <div>
-      <SectionHeader title="Congress & Insider Trades" subtitle="Follow the smart money" />
+      <SectionHeader title="Latest Insider Trades" subtitle="Form 4 filings, updated every 5 minutes" />
+
+      <div className="mb-4 flex gap-2">
+        {(["all", "buy", "sell"] as const).map((k) => (
+          <button
+            key={k}
+            onClick={() => setFilter(k)}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium uppercase tracking-wider transition ${
+              filter === k
+                ? "bg-emerald-500/10 text-emerald-400"
+                : "border border-white/10 text-white/50 hover:text-white/80"
+            }`}
+          >
+            {k}
+          </button>
+        ))}
+      </div>
+
+      {error && (
+        <div className="mb-4 rounded-xl border border-red-500/30 bg-red-500/[0.06] p-4 text-sm text-red-300">
+          Could not load insider feed: {error}
+        </div>
+      )}
+
       <div className="overflow-hidden rounded-2xl border border-white/[0.06]">
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/5 bg-white/[0.02]">
               <th className="px-5 py-3 text-left text-xs font-medium text-white/40">Name</th>
               <th className="px-5 py-3 text-left text-xs font-medium text-white/40">Ticker</th>
-              <th className="px-5 py-3 text-left text-xs font-medium text-white/40">Type</th>
+              <th className="px-5 py-3 text-left text-xs font-medium text-white/40">Title</th>
               <th className="px-5 py-3 text-left text-xs font-medium text-white/40">Action</th>
               <th className="px-5 py-3 text-right text-xs font-medium text-white/40">Amount</th>
               <th className="px-5 py-3 text-left text-xs font-medium text-white/40">Date</th>
             </tr>
           </thead>
           <tbody>
-            {insiderTrades.map((t, i) => (
-              <tr key={i} className="border-b border-white/[0.03] transition hover:bg-white/[0.02]">
+            {trades === null && (
+              <tr><td colSpan={6} className="px-5 py-10 text-center text-sm text-white/40">Loading…</td></tr>
+            )}
+            {trades !== null && filtered.length === 0 && (
+              <tr><td colSpan={6} className="px-5 py-10 text-center text-sm text-white/40">No trades match this filter.</td></tr>
+            )}
+            {filtered.map((t, i) => (
+              <tr
+                key={i}
+                onClick={() => t.ticker && t.ticker !== "—" && router.push(`/research/stock/${t.ticker}`)}
+                className="cursor-pointer border-b border-white/[0.03] transition hover:bg-white/[0.04]"
+              >
                 <td className="px-5 py-3 text-sm">{t.name}</td>
                 <td className="px-5 py-3 text-sm font-semibold text-emerald-400">{t.ticker}</td>
-                <td className="px-5 py-3">
-                  <span className={`rounded px-2 py-0.5 text-[10px] font-semibold ${
-                    t.type === "Congress" ? "bg-blue-500/10 text-blue-400" : "bg-purple-500/10 text-purple-400"
-                  }`}>
-                    {t.type}
-                  </span>
-                </td>
+                <td className="px-5 py-3 text-xs text-white/50">{t.title}</td>
                 <td className="px-5 py-3">
                   <span className={`text-sm font-medium ${t.action === "Buy" ? "text-emerald-400" : "text-red-400"}`}>
                     {t.action}
                   </span>
                 </td>
-                <td className="px-5 py-3 text-right text-sm text-white/70">{t.amount}</td>
+                <td className="px-5 py-3 text-right text-sm text-white/70">{t.amountFormatted}</td>
                 <td className="px-5 py-3 text-sm text-white/30">{t.date}</td>
               </tr>
             ))}
@@ -628,15 +765,6 @@ const sentimentData = [
   { ticker: "TSLA", sentiment: "Bullish" as const, mentions: 18200, buzzScore: 88, mentionChange: 120, bullishPct: 62 },
   { ticker: "AAPL", sentiment: "Bullish" as const, mentions: 8900, buzzScore: 72, mentionChange: 15, bullishPct: 70 },
   { ticker: "ARM", sentiment: "Bullish" as const, mentions: 5200, buzzScore: 81, mentionChange: 85, bullishPct: 75 },
-];
-
-const insiderTrades = [
-  { name: "Nancy Pelosi", ticker: "NVDA", type: "Congress" as const, action: "Buy" as const, amount: "$1M - $5M", date: "Apr 18" },
-  { name: "Dan Crenshaw", ticker: "MSFT", type: "Congress" as const, action: "Buy" as const, amount: "$500K - $1M", date: "Apr 17" },
-  { name: "Jensen Huang (CEO)", ticker: "NVDA", type: "Insider" as const, action: "Buy" as const, amount: "$2.4M", date: "Apr 15" },
-  { name: "Tim Cook (CEO)", ticker: "AAPL", type: "Insider" as const, action: "Buy" as const, amount: "$1.8M", date: "Apr 12" },
-  { name: "Tommy Tuberville", ticker: "CRDO", type: "Congress" as const, action: "Buy" as const, amount: "$250K - $500K", date: "Apr 10" },
-  { name: "Satya Nadella (CEO)", ticker: "MSFT", type: "Insider" as const, action: "Buy" as const, amount: "$3.1M", date: "Apr 8" },
 ];
 
 const sectorData = [
