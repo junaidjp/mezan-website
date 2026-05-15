@@ -151,9 +151,8 @@ const STOCKS: Stock[] = [
     risk: "Competing directly with NBIS, CoreWeave, Lambda Labs. May lack differentiation long-term.",
     scores: { marketcap: 4, inflection: 3, catalyst: 4, sponsorship: 2, price: 5 },
     sndk_similarity:
-      "Beaten-down neocloud while peers rally. Classic under-ownership setup if Q3 earnings catalyze.",
-    upcoming: "Q3 2026 earnings May 7 — TODAY",
-    badge: "EARNINGS TODAY",
+      "Beaten-down neocloud while peers rally. Classic under-ownership setup if earnings catalyze.",
+    upcoming: "Next earnings — see detail",
   },
 ];
 
@@ -490,17 +489,54 @@ export default function SweetSpotPage() {
                             </span>
                           )}
                         </div>
+                        {(() => {
+                          const e = enriched[stock.ticker]?.earnings;
+                          if (!e?.date) return null;
+                          const dt = new Date(e.date);
+                          const dateLabel = dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                          const days = e.daysAway;
+                          const imminent = typeof days === "number" && days >= 0 && days <= 7;
+                          const stampColor = imminent ? "#ffd700" : "#5b7a99";
+                          return (
+                            <div
+                              style={{
+                                fontSize: 10,
+                                color: stampColor,
+                                marginTop: 4,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 4,
+                              }}
+                            >
+                              <span>📅</span>
+                              <span>Earnings {dateLabel}</span>
+                              {typeof days === "number" && (
+                                <span style={{ color: "#4a7fa5" }}>
+                                  · {days === 0 ? "today" : days === 1 ? "tomorrow" : `in ${days}d`}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      {stock.badge && (
-                        <span
-                          className="badge pulse"
-                          style={{ background: "#1a3a1a", color: "#00c864", border: "1px solid #00c864" }}
-                        >
-                          {stock.badge}
-                        </span>
-                      )}
+                      {(() => {
+                        const days = enriched[stock.ticker]?.earnings?.daysAway;
+                        let label: string | null = null;
+                        if (days === 0) label = "EARNINGS TODAY";
+                        else if (days === 1) label = "EARNINGS TOMORROW";
+                        else if (typeof days === "number" && days > 1 && days <= 7) label = `EARNINGS IN ${days}D`;
+                        else if (stock.badge) label = stock.badge;
+                        return label ? (
+                          <span
+                            className="badge pulse"
+                            style={{ background: "#1a3a1a", color: "#00c864", border: "1px solid #00c864" }}
+                          >
+                            {label}
+                          </span>
+                        ) : null;
+                      })()}
                       <div
                         style={{
                           width: 44,
