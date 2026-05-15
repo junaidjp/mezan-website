@@ -18,6 +18,9 @@ export default function Home() {
             <a href="#features" className="hover:text-white">
               Features
             </a>
+            <a href="/tools" className="hover:text-white">
+              Free Tools
+            </a>
             <a href="#halal" className="hover:text-white">
               Halal Method
             </a>
@@ -159,6 +162,58 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FREE TOOLS */}
+      <section id="tools" className="mx-auto max-w-6xl px-4 py-14">
+        <div className="rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/[0.06] via-white/[0.02] to-transparent p-8 md:p-10">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">Free · No Signup</p>
+              <h2 className="mt-2 text-2xl font-bold md:text-3xl">
+                Calculators that pay for themselves
+              </h2>
+              <p className="mt-2 max-w-xl text-white/60">
+                Professional-grade trading tools, free for everyone. Used by Mezan subscribers before every trade.
+              </p>
+            </div>
+            <a
+              href="/tools"
+              className="rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:border-emerald-500/40 hover:bg-white/[0.04]"
+            >
+              View all tools →
+            </a>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <a
+              href="/tools/position-size-calculator"
+              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition hover:border-emerald-500/30 hover:bg-white/[0.04]"
+            >
+              <div className="text-3xl">📊</div>
+              <h3 className="mt-3 text-lg font-bold">Position Size Calculator</h3>
+              <p className="mt-2 text-sm text-white/50">
+                Enter your account, risk %, entry, and stop — get the exact share count that keeps you within your plan.
+              </p>
+              <p className="mt-4 text-sm font-semibold text-emerald-400 transition group-hover:translate-x-1">
+                Open calculator →
+              </p>
+            </a>
+            <a
+              href="/tools/risk-reward-calculator"
+              className="group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 transition hover:border-emerald-500/30 hover:bg-white/[0.04]"
+            >
+              <div className="text-3xl">⚖️</div>
+              <h3 className="mt-3 text-lg font-bold">Risk : Reward Calculator</h3>
+              <p className="mt-2 text-sm text-white/50">
+                Is the trade worth taking? Get the R:R ratio plus a quality grade — SKIP, MARGINAL, STRONG, or EXCEPTIONAL.
+              </p>
+              <p className="mt-4 text-sm font-semibold text-emerald-400 transition group-hover:translate-x-1">
+                Open calculator →
+              </p>
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* DOWNLOAD */}
       <section id="download" className="mx-auto max-w-6xl px-4 py-16">
         <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-10 text-center">
@@ -193,6 +248,10 @@ export default function Home() {
             performance is not indicative of future results.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
+            <a href="/tools" className="text-emerald-400 hover:text-emerald-300">
+              Free Tools
+            </a>
+            <span>•</span>
             <a href="/privacy-policy" className="hover:text-white">
               Privacy Policy
             </a>

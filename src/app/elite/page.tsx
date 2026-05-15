@@ -251,7 +251,8 @@ export default function ElitePage() {
             <p className="text-sm text-white/20">
               Mezan Investing is for educational purposes only. Not financial advice. Investing involves risk.
             </p>
-            <div className="flex gap-6 text-xs text-white/30">
+            <div className="flex flex-wrap gap-6 text-xs text-white/30">
+              <a href="/tools" className="hover:text-emerald-400 transition">Free Tools</a>
               <a href="/privacy-policy" className="hover:text-white transition">Privacy</a>
               <a href="/terms-conditions" className="hover:text-white transition">Terms</a>
               <a href="/delete-account" className="hover:text-white transition">Delete Account</a>
@@ -418,7 +419,7 @@ const faqs = [
     a: "Scanners update daily. News and social sentiment refresh throughout the day. AI analysis runs on the latest available market data. Charts are real-time via TradingView.",
   },
   {
-    q: "Is the annual plan available?",
-    a: "Annual is currently sold out — we cap annual seats to keep the experience high-quality. Monthly is fully available, and you can join the annual waitlist by emailing support@mezaninvesting.com. We'll let you know as soon as a spot opens up.",
+    q: "Are subscriptions open right now?",
+    a: "Both monthly and annual are currently paused for new sign-ups while we put the final touches on the platform. Existing subscribers continue to have full access. To be notified when we reopen, join either waitlist by emailing support@mezaninvesting.com or DM Junaid in his WhatsApp group.",
   },
 ];

@@ -88,8 +88,12 @@ export default function StockDetailPage() {
       <header className="sticky top-0 z-50 border-b border-white/5 bg-[var(--bg)]/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           <div className="flex items-center gap-4">
-            <a href="/research" className="text-lg font-semibold tracking-tight">
-              Mezan <span className="text-emerald-400">Research</span>
+            <a href="/" className="text-lg font-semibold tracking-tight transition hover:opacity-80" title="Back to home">
+              Mezan <span className="text-emerald-400">Investing</span>
+            </a>
+            <span className="text-white/20">/</span>
+            <a href="/research" className="text-sm text-white/60 transition hover:text-emerald-400">
+              Research
             </a>
             <span className="text-white/20">/</span>
             <span className="font-semibold">{t}</span>

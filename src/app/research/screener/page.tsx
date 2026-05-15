@@ -217,14 +217,22 @@ export default function ScreenerPage() {
         <div className="mx-auto max-w-7xl px-6 py-5">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold">Stock Screener</h1>
+              <a href="/" className="text-[11px] uppercase tracking-wider text-white/30 hover:text-emerald-400 transition" title="Back to home">
+                ← Mezan Investing <span className="text-white/15">//</span> Research
+              </a>
+              <h1 className="mt-1 text-2xl font-bold">Stock Screener</h1>
               <p className="mt-1 text-sm text-white/40">
                 Filter halal-compliant US stocks by fundamentals & technicals.
               </p>
             </div>
-            <a href="/research" className="text-sm text-emerald-400 hover:underline">
-              ← Back to Research
-            </a>
+            <div className="flex flex-col items-end gap-1.5">
+              <a href="/" className="text-xs text-white/40 hover:text-emerald-400 transition">
+                ← Home
+              </a>
+              <a href="/research" className="text-sm text-emerald-400 hover:underline">
+                ← Back to Research
+              </a>
+            </div>
           </div>
         </div>
       </div>
