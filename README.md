@@ -18,6 +18,22 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Local development against sandbox
+
+By default the site uses the **production** Firebase project (`learn-trading-app`) and the **production** compliance-check-api on Cloud Run. To develop locally against the same sandbox stack the mobile app uses, add the following to `.env.local`:
+
+```
+NEXT_PUBLIC_ENV=sandbox
+NEXT_PUBLIC_BACKEND_URL=http://192.168.4.75:8080
+```
+
+- `NEXT_PUBLIC_ENV=sandbox` makes [src/lib/firebase.ts](src/lib/firebase.ts) target the `mezan-app-sadnbox` Firebase project, so users created in the local mobile app can sign in here with the same UID.
+- `NEXT_PUBLIC_BACKEND_URL` is the base URL for **client-side** API calls (e.g. the `/elite/request` form). It must be your LAN IP (not `localhost`) so a physical phone hitting the dev site can also reach the backend. Replace `192.168.4.75` with your own laptop's LAN IP. Remove the var to talk to the deployed Cloud Run backend instead.
+
+Server-side route handlers (under `src/app/api/`) read `BACKEND_URL` (no `NEXT_PUBLIC_` prefix) — adjust that separately if you want server-side calls to also target localhost.
+
+Switch back to production by commenting out or removing the two `NEXT_PUBLIC_*` entries.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

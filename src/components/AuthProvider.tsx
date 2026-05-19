@@ -47,11 +47,25 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   // loading is true until BOTH firebase auth and backend access check complete
   const loading = !authReady || (user !== null && !accessReady);
 
-  // Generate or retrieve session ID for this browser
+  // Generate or retrieve session ID for this browser.
+  // crypto.randomUUID() requires a secure context (HTTPS or http://localhost),
+  // so we fall back to an RFC4122-shaped v4 UUID when running over LAN/HTTP
+  // for local dev. The session id is opaque — collision risk is fine here.
+  const generateUuid = (): string => {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID();
+    }
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
   const getSessionId = () => {
     let sid = sessionStorage.getItem("mezan_session_id");
     if (!sid) {
-      sid = crypto.randomUUID();
+      sid = generateUuid();
       sessionStorage.setItem("mezan_session_id", sid);
     }
     return sid;

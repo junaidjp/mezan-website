@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../components/AuthProvider";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user, login, signup } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,10 +14,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
 
+  // Where to send the user after a successful sign-in. Honors ?next= when present
+  // (e.g. /login?next=/elite/request) — otherwise falls back to /research.
+  // Restricted to same-site paths to prevent open redirects.
+  const rawNext = searchParams.get("next") || "";
+  const nextPath = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/research";
+
   // If already logged in, redirect
   useEffect(() => {
-    if (user) router.push("/research");
-  }, [user, router]);
+    if (user) router.push(nextPath);
+  }, [user, router, nextPath]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +36,7 @@ export default function LoginPage() {
       } else {
         await login(email, password);
       }
-      router.push("/research");
+      router.push(nextPath);
     } catch (err: any) {
       const code = err?.code || "";
       if (code === "auth/user-not-found") setError("No account found with this email.");
